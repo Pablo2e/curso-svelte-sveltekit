@@ -1,26 +1,21 @@
 <script>
-  let count1 = 0;
-  let count2 = 0;
+  /* los props se exportan */
+  export let initialCount; // usado asi obliga a que esté pasado como prop 
+  export let maxCount = undefined; // usado asi NO obliga a que esté pasado como prop
 
-  /* No funciona porque las variables reactivas no estan asignadas al valor reactivo
-  function getTotal(){return count1 + count2}; 
-  $: string = `The count total is ${getTotal()}.`; */  
-  
-  function setCount2(x){
-    return count2 = x;
-  }; 
-  /* si el orden fuera inverso no funcionaría porque tiene en cuenta cuando se actualiza que */
-  $: setCount2(count1);
-  $: string = `Count2 is ${count2}.`;
+  // props contiene los pros y restProps todos los props que se le pasen pero no estén definidos
+  // Los restProps no son aconsejables usar por una cuestion de rendimiento
+  console.log($$props, $$restProps); 
 
-  function increment1 () {
-    count1 ++
+  let count = initialCount;
+
+  function increment () {
+    if(count === maxCount) return
+    count += 1;
   }
 </script>
 
-<button on:click={increment1}>count is {count1}</button>
-<h3>{string}</h3>
-
+<button on:click={increment}>count is {count}</button>
 <style>
   button {
     padding: 15px 20px;
