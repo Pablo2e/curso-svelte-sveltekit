@@ -1,17 +1,10 @@
 <script>
-  import Counter from './lib/Counter.svelte'
-
-  const props = {
-    maxCount: 10,
-    initialCount: 6
-  }
-  const initialCount = 6;
+  import Button from "./lib/Button.svelte";
 </script>
 
-<Counter {...props}/>
-<Counter {...props} x="y"/>
-<Counter {initialCount}/>
-<Counter initialCount={6} maxCount={10}/>
+<!-- <button><slot/></button> <button><slot>Fallback</slot></button> -->
+<Button>Button Text</Button> <!-- aparece Button Text en ambos -->
+<Button></Button> <!-- aparece Button Text solo en el segundo -->
 
 <style>
 
