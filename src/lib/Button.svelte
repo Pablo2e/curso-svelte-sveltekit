@@ -4,11 +4,11 @@
 	export let bgColor = 'inherit';
 	export let textColor = 'inherit';
 
-	let isLeftHovered = false;
+	let isLeftHovered;
 </script>
 
-<!-- clase condicional, si size igual a large asigna a la clase size-lg -->
 <button
+	on:click
 	style:--buttonBgColor={bgColor}
 	style:--buttonTextColor={textColor}
 	class:size-lg={size === 'large'}
@@ -16,16 +16,16 @@
 	class:has-left={$$slots.leftContent}
 	class:shadow
 >
-{#if $$slots.leftContent}
-    <div
-      class="left-content"
-      on:mouseenter={() => (isLeftHovered = true)}
-      on:mouseleave={() => (isLeftHovered = false)}
-    >
-      <slot name="leftContent" />
-    </div>
-  {/if}
-  <slot {isLeftHovered}>Fallback</slot>
+	{#if $$slots.leftContent}
+		<div
+			class="left-content"
+			on:mouseenter={() => (isLeftHovered = true)}
+			on:mouseleave={() => (isLeftHovered = false)}
+		>
+			<slot name="leftContent" />
+		</div>
+	{/if}
+	<slot {isLeftHovered}>Fallback</slot>
 </button>
 
 <style lang="scss">
