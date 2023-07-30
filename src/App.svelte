@@ -19,11 +19,14 @@
       completed: true
     },
   ]
-  $: console.log(todos);
+
+  function handleAddTodo(event){
+    /* event.preventDefault(); no borra el input si no está*/
+    console.log(event.detail.title);
+  }
 </script>
 
-<h2>{todos.length} Todos</h2>
-<TodoList bind:todos />
+<TodoList {todos} on:addTodo={handleAddTodo} />
 
 <style>
 </style>
