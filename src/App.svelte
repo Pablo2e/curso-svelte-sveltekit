@@ -30,9 +30,17 @@
       },
     ]
   }
+
+  function handleRemoveTodo(event){
+    todos = todos.filter(todo => todo.id !== event.detail.id);
+  }
 </script>
 
-<TodoList {todos} on:addTodo={handleAddTodo} />
+<TodoList 
+  {todos} 
+  on:addTodo={handleAddTodo} 
+  on:removeTodo={handleRemoveTodo}
+/>
 
 <style>
 </style>
