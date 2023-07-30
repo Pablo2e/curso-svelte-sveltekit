@@ -21,8 +21,14 @@
   ]
 
   function handleAddTodo(event){
-    /* event.preventDefault(); no borra el input si no está*/
-    console.log(event.detail.title);
+    todos = [
+      ...todos,
+      { 
+        id: uuid(), 
+        title: event.detail.title, 
+        completed: true
+      },
+    ]
   }
 </script>
 

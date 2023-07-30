@@ -1,3 +1,5 @@
+<svelte:options immutable={true} />
+
 <script>
   export let todos = [];
   import Button from "./Button.svelte";
