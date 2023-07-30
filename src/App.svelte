@@ -8,12 +8,11 @@
 	on:click|once={(event) => {
 		alert(true);
 	}}
-	let:isLeftHovered
 	size="small"
 	shadow
 	disabled
 >
-	<div style:width="20px" slot="leftContent">
+	<div style:width="20px" slot="leftContent"  let:isLeftHovered>
 		{#if isLeftHovered}
 			<FaAngellist />
 		{:else}

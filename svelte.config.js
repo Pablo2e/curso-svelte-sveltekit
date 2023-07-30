@@ -1,8 +1,9 @@
-import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+import preprocess from 'svelte-preprocess';
+ 
 export default { 
-  preprocess: vitePreprocess({
+  preprocess: preprocess({
     scss: {
-      prependData: '@use "../src/styles/variables.scss"'
+      prependData: '@use "./src/styles/variables.scss";'
     }
   })
 };

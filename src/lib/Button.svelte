@@ -18,19 +18,19 @@
 	{...$$restProps}
 >
 	{#if $$slots.leftContent}
+		<!-- svelte-ignore a11y-no-static-element-interactions -->
 		<div
 			class="left-content"
 			on:mouseenter={() => (isLeftHovered = true)}
 			on:mouseleave={() => (isLeftHovered = false)}
 		>
-			<slot name="leftContent" />
+			<slot name="leftContent" {isLeftHovered} />
 		</div>
 	{/if}
 	<slot {isLeftHovered}>Fallback</slot>
 </button>
 
 <style lang="scss">
-  @use '../styles/variables.scss';
 	button {
 		display: flex;
 		align-items: center;
