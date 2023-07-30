@@ -6,14 +6,6 @@
 
   function handleAddTodo(){
     if(!inputText) return;
-   /*  todos.push({ 
-      id: uuid(), 
-      title: inputText, 
-      completed: true
-    })
-    todos = todos; 
-    con metodos hay que asignarlo sinó no lo refresca, tanto arrays como objetos */
-    /* sin metodos no hay que hacerlo como aqui abajo */
     todos = [
       ...todos, 
       { 
