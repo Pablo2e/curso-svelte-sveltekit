@@ -3,6 +3,7 @@
 	import { v4 as uuid } from 'uuid';
 
 	let todoList;
+	let showList = true;
 
 	let todos = [
 		{
@@ -51,19 +52,20 @@
 	}
 </script>
 
-<TodoList
-	{todos}
-	bind:this={todoList}
-	on:addtodo={handleAddTodo}
-	on:removetodo={handleRemoveTodo}
-	on:toggleTodo={handleToggleTodo}
-/>
+<label>
+	<input type="checkbox" bind:checked={showList} />
+	Show/Hide list
+</label>
 
-<button
-	on:click={() => {
-		todoList.focusInput();
-	}}>Focus input</button
->
+{#if showList}
+	<TodoList
+		{todos}
+		bind:this={todoList}
+		on:addtodo={handleAddTodo}
+		on:removetodo={handleRemoveTodo}
+		on:toggleTodo={handleToggleTodo}
+	/>
+{/if}
 
 <style>
 </style>
