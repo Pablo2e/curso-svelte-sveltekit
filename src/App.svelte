@@ -24,7 +24,8 @@
 		},
 		{
 			id: uuid(),
-			title: 'A long long long long long long long long long long long long long long todo',
+			title:
+        'A long long long long long long long long long long long long long long long long long long todo',
 			completed: false
 		}
 	];
@@ -63,7 +64,7 @@
 </label>
 
 {#if showList}
-	<div style:max-width="200px">
+	<div style:max-width="400px">
 		<TodoList
 			{todos}
 			bind:this={todoList}
