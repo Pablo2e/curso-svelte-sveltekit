@@ -58,13 +58,15 @@
 </label>
 
 {#if showList}
-	<TodoList
-		{todos}
-		bind:this={todoList}
-		on:addtodo={handleAddTodo}
-		on:removetodo={handleRemoveTodo}
-		on:toggleTodo={handleToggleTodo}
-	/>
+	<div style:max-width="200px">
+		<TodoList
+			{todos}
+			bind:this={todoList}
+			on:addTodo={handleAddTodo}
+			on:removeTodo={handleRemoveTodo}
+			on:toggleTodo={handleToggleTodo}
+		/>
+	</div>
 {/if}
 
 <style>

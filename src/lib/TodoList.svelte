@@ -18,30 +18,39 @@
 
 	beforeUpdate(() => {
 		if(listDiv){
-			console.log(listDiv.offsetHeight);
+			if(autoscroll) listDiv.scrollTo(0, listDiv.scrollHeight);
+			autoscroll = false;
 		}
 	});
 
-afterUpdate(() => {
-	console.log(listDiv.offsetHeight);
-});
+	afterUpdate(() => {
+		console.log(listDiv.offsetHeight);
+	});
 
 	export let todos = [];
-	export const readonly = 'read only';
+	let prevTodos = todos;
+
+	$: {
+		autoscroll = todos.length > prevTodos.length;
+		prevTodos = todos;
+	}
+
 	export function clearInput() {
 		inputText = '';
 	}
+
 	export function focusInput() {
 		input.focus();
 	}
+	
 	let inputText = '';
-	let input, listDiv;
+	let input, listDiv, autoscroll;
 
 	const dispatch = createEventDispatcher();
 
 	function handleAddTodo() {
 		const isNotCancelled = dispatch(
-			'addtodo',
+			'addTodo',
 			{
 				title: inputText
 			},
@@ -53,7 +62,7 @@ afterUpdate(() => {
 	}
 
 	function handleRemoveTodo(id) {
-		dispatch('removetodo', {
+		dispatch('removeTodo', {
 			id
 		});
 	}
@@ -92,3 +101,10 @@ afterUpdate(() => {
 		<Button type="submit" disabled={!inputText}>Add</Button>
 	</form>
 </div>
+
+<style>
+	.todo-list {
+		max-height: 150px;
+		overflow: auto;
+	}
+</style>
