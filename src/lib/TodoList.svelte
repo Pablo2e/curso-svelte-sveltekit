@@ -2,26 +2,9 @@
 
 <script>
 	import Button from './Button.svelte';
-	import { createEventDispatcher, onMount, onDestroy, beforeUpdate, afterUpdate } from 'svelte';
+	import { createEventDispatcher, afterUpdate } from 'svelte';
+  import FaRegTrashAlt from 'svelte-icons/fa/FaRegTrashAlt.svelte';
 
-	// hay que usarlo en el top level del componente
-	onMount(() => {
-		console.log('Mounted')
-		return (() => {
-			console.log('Destroyed 2');
-		})
-	});
-
-	onDestroy(() => {
-		console.log('Destroyed');
-	});
-
-	beforeUpdate(() => {
-		if (listDiv) {
-			console.log(listDiv.offsetHeight);
-		}
-	});
-	
 	afterUpdate(() => {
 		if (autoscroll) listDiv.scrollTo(0, listDivScrollHeight);
 		autoscroll = false;
@@ -29,6 +12,10 @@
 
 	export let todos = [];
 	let prevTodos = todos;
+	let inputText = '';
+	let input, listDiv, autoscroll, listDivScrollHeight;
+
+	const dispatch = createEventDispatcher();
 
 	$: {
 		autoscroll = todos.length > prevTodos.length;
@@ -42,11 +29,6 @@
 	export function focusInput() {
 		input.focus();
 	}
-
-	let inputText = '';
-	let input, listDiv, autoscroll, listDivScrollHeight;
-
-	const dispatch = createEventDispatcher();
 
 	function handleAddTodo() {
 		const isNotCancelled = dispatch(
@@ -78,24 +60,36 @@
 <div class="todo-list-wrapper">
 	<div class="todo-list" bind:this={listDiv}>
 		<div bind:offsetHeight={listDivScrollHeight}>
-			<ul>
-				{#each todos as { id, title, completed } (id)}
-					<li>
-						<label>
-							<input
-								on:input={(event) => {
-									event.currentTarget.checked = completed;
-									handleToggleTodo(id, !completed);
-								}}
-								type="checkbox"
-								checked={completed}
-							/>
-							{title}
-						</label>
-						<button on:click={() => handleRemoveTodo(id)}>Remove</button>
-					</li>
-				{/each}
-			</ul>
+			{#if todos.length === 0}
+        <p class="no-items-text">No todos yet</p>
+      {:else}
+        <ul>
+          {#each todos as { id, title, completed } (id)}
+            <li class:completed>
+              <label>
+                <input
+                  on:input={(event) => {
+                    event.currentTarget.checked = completed;
+                    handleToggleTodo(id, !completed);
+                  }}
+                  type="checkbox"
+                  checked={completed}
+                />
+                {title}
+              </label>
+              <button
+                class="remove-todo-button"
+                aria-label="Remove todo: {title}"
+                on:click={() => handleRemoveTodo(id)}
+              >
+                <span style:width="10px" style:display="inline-block">
+                  <FaRegTrashAlt />
+                </span>
+              </button>
+            </li>
+          {/each}
+        </ul>
+      {/if}
 		</div>
 	</div>
 	<form class="add-todo-form" on:submit|preventDefault={handleAddTodo}>

@@ -21,13 +21,16 @@
 			id: uuid(),
 			title: 'Todo 3',
 			completed: true
+		},
+		{
+			id: uuid(),
+			title: 'A long long long long long long long long long long long long long long todo',
+			completed: false
 		}
 	];
 
 	async function handleAddTodo(event) {
 		event.preventDefault();
-		
-		console.log(document.querySelectorAll('.todo-list ul li'));
 		todos = [
 			...todos,
 			{
@@ -36,9 +39,8 @@
 				completed: false
 			}
 		];
-		await tick(); // hace que el dom se actualice completo antes de seguir
-		console.log(document.querySelectorAll('.todo-list ul li'));
-			todoList.clearInput();
+		await tick();
+		todoList.clearInput();
 	}
 
 	function handleRemoveTodo(event) {
