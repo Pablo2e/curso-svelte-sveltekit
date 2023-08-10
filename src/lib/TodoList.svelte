@@ -10,7 +10,10 @@
 		autoscroll = false;
 	});
 
-	export let todos = [];
+	export let todos = null;
+  export let error = null;
+  export let isLoading = false;
+
 	let prevTodos = todos;
 	let inputText = '';
 	let input, listDiv, autoscroll, listDivScrollHeight;
@@ -18,7 +21,7 @@
 	const dispatch = createEventDispatcher();
 
 	$: {
-		autoscroll = todos.length > prevTodos.length;
+		autoscroll = todos && prevTodos && todos.length > prevTodos.length;
 		prevTodos = todos;
 	}
 
@@ -32,7 +35,7 @@
 
 	function handleAddTodo() {
 		const isNotCancelled = dispatch(
-			'addTodo',
+			'addtodo',
 			{
 				title: inputText
 			},
@@ -44,13 +47,13 @@
 	}
 
 	function handleRemoveTodo(id) {
-		dispatch('removeTodo', {
+		dispatch('removetodo', {
 			id
 		});
 	}
 
 	function handleToggleTodo(id, value) {
-		dispatch('toggleTodo', {
+		dispatch('toggletodo', {
 			id,
 			value
 		});
@@ -58,6 +61,11 @@
 </script>
 
 <div class="todo-list-wrapper">
+  {#if isLoading}
+    <p class="state-text">Loading...</p>
+  {:else if error}
+    <p class="state-text">{error}</p>
+  {:else if todos}
   <div class="todo-list" bind:this={listDiv}>
     <div bind:offsetHeight={listDivScrollHeight}>
       {#if todos.length === 0}
@@ -92,6 +100,7 @@
       {/if}
     </div>
   </div>
+  {/if}
   <form class="add-todo-form" on:submit|preventDefault={handleAddTodo}>
     <input bind:this={input} bind:value={inputText} placeholder="New Todo" />
     <Button class="add-todo-button" type="submit" disabled={!inputText}>Add</Button>
@@ -102,7 +111,7 @@
   .todo-list-wrapper {
     background-color: #424242;
     border: 1px solid #4b4b4b;
-    .no-items-text {
+    .state-text {
       margin: 0;
       padding: 15px;
       text-align: center;

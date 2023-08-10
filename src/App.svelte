@@ -1,78 +1,75 @@
 <script>
-	import TodoList from './lib/TodoList.svelte';
-	import { v4 as uuid } from 'uuid';
-	import { tick } from 'svelte';
+  import TodoList from './lib/TodoList.svelte';
+  import { v4 as uuid } from 'uuid';
+  import { tick, onMount } from 'svelte';
 
-	let todoList;
-	let showList = true;
+  let todoList;
+  let showList = true;
 
-	let todos = null;
-  let promise = loadTodos();
+  let todos = null;
+  let error = null;
+  let isLoading = false;
 
-	function loadTodos() {
-    return fetch('https://jsonplaceholder.typicode.com/todos?_limit=10').then((response) => {
+  onMount(() => {
+    loadTodos();
+  });
+
+  async function loadTodos() {
+    isLoading = true;
+    await fetch('https://jsonplaceholder.typicode.com/todos?_limit=10').then(async (response) => {
       if (response.ok) {
-        return response.json();
+        todos = await response.json();
       } else {
-        throw new Error('An error has occurred.');
+        error = 'An error has occurred';
       }
     });
+    isLoading = false;
   }
 
-	async function handleAddTodo(event) {
-		event.preventDefault();
-		todos = [
-			...todos,
-			{
-				id: uuid(),
-				title: event.detail.title,
-				completed: false
-			}
-		];
-		await tick();
-		todoList.clearInput();
-	}
+  async function handleAddTodo(event) {
+    event.preventDefault();
+    todos = [
+      ...todos,
+      {
+        id: uuid(),
+        title: event.detail.title,
+        completed: false
+      }
+    ];
+    await tick();
+    todoList.clearInput();
+  }
 
-	function handleRemoveTodo(event) {
-		todos = todos.filter((t) => t.id !== event.detail.id);
-	}
+  function handleRemoveTodo(event) {
+    todos = todos.filter((t) => t.id !== event.detail.id);
+  }
 
-	function handleToggleTodo(event) {
-		todos = todos.map((todo) => {
-			if (todo.id === event.detail.id) {
-				return { ...todo, completed: event.detail.value };
-			}
-			return { ...todo };
-		});
-	}
+  function handleToggleTodo(event) {
+    todos = todos.map((todo) => {
+      if (todo.id === event.detail.id) {
+        return { ...todo, completed: event.detail.value };
+      }
+      return { ...todo };
+    });
+  }
 </script>
 
 <label>
-	<input type="checkbox" bind:checked={showList} />
-	Show/Hide list
+  <input type="checkbox" bind:checked={showList} />
+  Show/Hide list
 </label>
-
 {#if showList}
-	{#await promise}
-		<p>Loading...</p>
-	{:then todos}
-		<div style:max-width="400px">
-			<TodoList
-				{todos}
-				bind:this={todoList}
-				on:addTodo={handleAddTodo}
-				on:removeTodo={handleRemoveTodo}
-				on:toggleTodo={handleToggleTodo}
-			/>
-		</div>
-  {:catch error}
-    <p>{error.message || 'An error has occurred'}</p>
-  {/await}
-  <button
-    on:click={() => {
-      promise = loadTodos();
-    }}>Refresh</button
-  >
+  <div style:max-width="400px">
+    <TodoList
+      {todos}
+      {error}
+      {isLoading}
+      bind:this={todoList}
+      on:addtodo={handleAddTodo}
+      on:removetodo={handleRemoveTodo}
+      on:toggletodo={handleToggleTodo}
+    />
+  </div>
 {/if}
 
 <style>
