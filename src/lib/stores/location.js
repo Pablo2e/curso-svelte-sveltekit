@@ -1,24 +1,29 @@
-import { readable } from 'svelte/store';
+import { writable } from 'svelte/store';
 
-const location = readable(null, (set) => {
-  let watchId;
-  if (navigator.geolocation && navigator.geolocation.watchPosition) {
-    watchId = navigator.geolocation.watchPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        set({ latitude, longitude });
-      },
-      (error) => {
-        set({ error });
-      }
-    );
-  }
-  return () => {
-    if (navigator.geolocation && navigator.geolocation.clearWatch) {
-      navigator.geolocation.clearWatch(watchId);
+const defaultSettings = {
+  colorScheme: 'dark',
+  language: 'en',
+  fontSize: 12
+};
+function createSettingsStore() {
+  const { subscribe, set, update } = writable({ ...defaultSettings });
+  return {
+    subscribe,
+    set,
+    update,
+    updateSetting: (setting, value) => {
+      update((settings) => ({ ...settings, [setting]: value }));
+    },
+    toggleColorScheme: () => {
+      update((settings) => ({
+        ...settings,
+        colorScheme: settings.colorScheme === 'dark' ? 'light' : 'dark'
+      }));
+    },
+    reset: () => {
+      set({ ...defaultSettings });
     }
-    set(null);
   };
-});
+}
 
-export default location;
+export default createSettingsStore();
