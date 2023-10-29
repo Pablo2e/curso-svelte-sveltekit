@@ -1,4 +1,4 @@
-import { error, redirect } from '@sveltejs/kit';
+import { error/* , redirect */ } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params }) => {
@@ -11,6 +11,8 @@ export const load: PageServerLoad = async ({ params }) => {
 	}
 
 	return {
-		product
+		product,
+		title: product.title,
+		description: product.description
 	};
 };
